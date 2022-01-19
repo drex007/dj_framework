@@ -19,18 +19,19 @@ def apiView(request):
      'Detail View':'/details/<int:pk>/',
      'Create':'/create/',
      'Update':'/update/<int:pk>/',
-     'Delete':'/create//<int:pk>/',  
+     'Delete':'/create/<int:pk>/',  
     }
 
     return Response(web_urls)
 
+#Get employee List
 @api_view(['GET'])
 def employee_list(request):
         employees = Employee.objects.all()
         serializer = EmployeeSerializer(employees, many = True )
         return JsonResponse(serializer.data, safe= False)
 
-
+#Get Employee details 
 @api_view(['GET'])
 def employee_detail(request, pk):
     try:
@@ -41,14 +42,33 @@ def employee_detail(request, pk):
     return Response(serializer.data)
 
 
-
+#POst Employee
 @api_view(['POST'])
 def post_employee(request):
         serializer = EmployeeSerializer(data= request.data)
-
         if serializer.is_valid():
             serializer.save()
         return Response(serializer.data)
+
+#Update Employee
+@api_view(['POST'])
+def update_employee(request, pk):
+    employee = Employee.objects.get(id=pk)
+    serializer = EmployeeSerializer(employee, data= request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+#Delete Employee
+@api_view(['DELETE'])
+def delete_employee(request, pk):
+    try:
+        employee = Employee.objects.get(id=pk)
+    except Employee.DoesNotExist:
+        return HttpResponse(status=404)
+    employee.delete()
+    return Response("Item successfully deleted")
+
 
 
 
