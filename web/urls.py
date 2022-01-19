@@ -1,8 +1,11 @@
 from django.contrib import admin
 from django.urls import path
-from .views import employee_list,employee_detail
+from .views import apiView, employee_list, employee_detail
+
 urlpatterns = [
-    path('list/',employee_list, name = 'list_employees'),
-    path('detail/<int:pk>/',employee_detail, name = 'detail'),
+  
+  path('',apiView, name = 'apiView'),
+  path('list/',employee_list, name = 'employee_list'),
+   path('details/<int:pk>/',employee_detail, name = 'employee_detail'),
     
 ]
