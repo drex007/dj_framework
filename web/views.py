@@ -33,9 +33,12 @@ def employee_list(request):
 
 @api_view(['GET'])
 def employee_detail(request, pk):
+    try:
         employee = Employee.objects.get(id=pk)
-        serializer = EmployeeSerializer(employee )
-        return JsonResponse(serializer.data)
+    except Employee.DoesNotExist:
+        return HttpResponse(status=404)
+    serializer = EmployeeSerializer(employee )
+    return Response(serializer.data)
 
 
 
